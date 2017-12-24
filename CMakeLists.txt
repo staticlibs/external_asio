@@ -16,7 +16,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project
 project ( external_asio CXX C )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 1.10.8-1 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 1.10.8-2 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Asio C++ library wrapper for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_asio )
 
