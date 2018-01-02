@@ -26,12 +26,8 @@ before_install:
 
 install:
   - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then 
-    sudo apt-get -y install
-        g++
-        pkg-config
-        cmake
-        make
-        valgrind ; 
+    `# Android` ;
+    git clone https://github.com/staticlibs/android-ndk-r9d-arm-linux-androideabi-4.8.git ../android-ndk ;
     fi
 
 before_script:
@@ -59,6 +55,13 @@ script:
     lsb_release -a ;
     cmake ../external_asio/test -DCMAKE_BUILD_TYPE=Release ;
     make all test ;
+
+    `# Android` ;
+    cd .. ;
+    mkdir build-android ;
+    cd build-android ;
+    cmake ../external_asio/test -DCMAKE_BUILD_TYPE=Release -DSTATICLIB_TOOLCHAIN=android_armeabi_gcc -DANDROID_TOOLCHAIN_DIR=`pwd`/../android-ndk ;
+    make ;
 
     fi
 
