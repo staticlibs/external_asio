@@ -21,10 +21,8 @@
  * Created on May 5, 2017, 9:03 PM
  */
 
-#include <atomic>
 #include <chrono>
 #include <iostream>
-#include <mutex>
 
 #include "asio.hpp"
 
@@ -34,33 +32,33 @@ void test_connect() {
     asio::io_service service{};
     asio::ip::tcp::socket socket{service, asio::ip::tcp::v4()};
     asio::steady_timer timer{service};
-    std::mutex mutex{};
-    std::atomic<bool> connect_cancelled{false};
-    std::atomic<bool> timer_cancelled{false};
+    bool connect_cancelled = false;
+    bool timer_cancelled = false;
     asio::ip::tcp::endpoint endpoint{asio::ip::address_v4::from_string("127.0.0.1"), 4242};
     std::string error_message = "";
-    
+
     timer.expires_from_now(std::chrono::seconds(1));
+
     socket.async_connect(endpoint, [&](const asio::error_code& ec) {
-        std::lock_guard<std::mutex> guard{mutex};
-        if (connect_cancelled.load(std::memory_order_acquire)) {
+        if (connect_cancelled) {
             return;
         }
-        timer_cancelled.store(true, std::memory_order_release);
+        timer_cancelled = true;
         timer.cancel();
         if (ec) {
             error_message = "ERROR: " + ec.message();
         }
     });
+
     timer.async_wait([&](const asio::error_code&) {
-        std::lock_guard<std::mutex> guard{mutex};
-        if (timer_cancelled.load(std::memory_order_acquire)) {
+        if (timer_cancelled) {
             return;
         }
-        connect_cancelled.store(true, std::memory_order_release);
+        connect_cancelled = true;
         socket.close();
         error_message = "ERROR: Connection timed out (-1)";
     });
+
     service.run();
 }
 

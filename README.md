@@ -6,10 +6,8 @@ Asio C++ library wrapper for Staticlibs
 
 This project is a part of [Staticlibs](http://staticlibs.net/).
 
-This project contains a CMake project wrapper for [Asio C++ Library](https://think-async.com/Asio).
-
-[Asio sources imported from Fedora EPEL lookaside](https://github.com/ojdkbuild/lookaside_asio)
-are used as a submodule of this project.
+This project contains a CMake project wrapper for [Asio C++ Library](https://think-async.com/Asio) that
+can be used with sources imported from [CentOS lookaside](https://github.com/staticlibs/lookaside_asio.git).
 
 Link to the [documentation](http://think-async.com/Asio/asio-1.10.6/doc/).
 
@@ -20,6 +18,10 @@ This project is released under the [Boost Software License, Version 1.0](http://
 
 Changelog
 ---------
+
+**2018-02-28**
+ * version 1.10.8-3
+ * drop submodule
 
 **2017-12-24**
  * version 1.10.8-2

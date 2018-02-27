@@ -16,7 +16,7 @@ cmake_minimum_required ( VERSION 2.8.12 )
 
 # project
 project ( external_asio CXX C )
-set ( ${PROJECT_NAME}_STATICLIB_VERSION 1.10.8-2 )
+set ( ${PROJECT_NAME}_STATICLIB_VERSION 1.10.8-3 )
 set ( ${PROJECT_NAME}_DESCRIPTION "Asio C++ library wrapper for Staticlibs" )
 set ( ${PROJECT_NAME}_URL https://github.com/staticlibs/external_asio )
 
@@ -25,14 +25,15 @@ if ( NOT DEFINED CMAKE_LIBRARY_OUTPUT_DIRECTORY )
     set ( CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR} )
 endif ( )
 
+if ( NOT DEFINED ${PROJECT_NAME}_LOOKASIDE_DIR )
+    set ( asio_LOOKASIDE_DIR ${CMAKE_CURRENT_LIST_DIR}/../lookaside_asio CACHE INTERNAL "" )
+endif ( )
+
 add_custom_target ( ${PROJECT_NAME} )
 
 # pkg-config
 set ( ${PROJECT_NAME}_MODULE asio )
-set ( ${PROJECT_NAME}_PC_CFLAGS "-I${CMAKE_CURRENT_LIST_DIR}/asio/asio/include -DASIO_STANDALONE -DASIO_HAS_STD_CHRONO" )
-if ( ${CMAKE_CXX_COMPILER_ID}x MATCHES "MSVCx" )    
-    set ( ${PROJECT_NAME}_PC_CFLAGS "${${PROJECT_NAME}_PC_CFLAGS} -D_WIN32_WINNT=0x0501 -DWIN32_LEAN_AND_MEAN" )
-endif ( )
+set ( ${PROJECT_NAME}_PC_CFLAGS "-I${asio_LOOKASIDE_DIR}/asio/include -DASIO_STANDALONE -DASIO_HAS_STD_CHRONO" )
 if ( CMAKE_SYSTEM_NAME STREQUAL "Linux" )
     set ( ${PROJECT_NAME}_PC_LIBS "${${PROJECT_NAME}_PC_LIBS} -lpthread" )
 endif ( )
